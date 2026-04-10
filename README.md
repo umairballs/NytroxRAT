@@ -13,6 +13,7 @@ A self-hosted, open-source remote access tool for Windows written in C# (.NET 9)
 | 📊 Monitoring | CPU, RAM, disk, uptime, process list |
 | 🔐 Encryption | AES-256-GCM end-to-end (server never sees plaintext) |
 | 🔄 Relay server | Works through NAT & firewalls — no port forwarding needed |
+| 📸 Webcam | webcam can be acsessed and be seen live with the ability to take snapshots |
 
 ---
 
