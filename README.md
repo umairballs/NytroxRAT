@@ -1,7 +1,7 @@
 <p align="center">
   <img src="nytrox_logo.jpg" width="150" alt="NytroxRAT"/>
 </p>
-
+⚠️ Disclaimer: This tool is for educational and ethical purposes only; the developer assumes no liability for any misuse or damage. 🛡️
 # NytroxRAT
 
 A self-hosted, open-source remote access tool for Windows written in C# (.NET 9).
