@@ -1,0 +1,635 @@
+<Window x:Class="NytroxRAT.Client.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="NytroxRAT — Admin Console" Height="860" Width="1400"
+        Background="#060608" Foreground="#C8C8C8"
+        WindowStartupLocation="CenterScreen"
+        Icon="nytrox.ico" FontFamily="Consolas"
+        Loaded="Window_Loaded">
+
+    <Window.Resources>
+
+        <!-- ── Animations ─────────────────────────────────────────────── -->
+        <Style TargetType="Button" x:Key="PrimaryBtn">
+            <Setter Property="Background"      Value="#1A0000"/>
+            <Setter Property="Foreground"      Value="#CC2222"/>
+            <Setter Property="BorderBrush"     Value="#3A0000"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding"         Value="12,5"/>
+            <Setter Property="FontFamily"      Value="Consolas"/>
+            <Setter Property="FontWeight"      Value="Bold"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="RenderTransform">
+                <Setter.Value><ScaleTransform ScaleX="1" ScaleY="1"/></Setter.Value>
+            </Setter>
+            <Setter Property="Effect">
+                <Setter.Value><DropShadowEffect Color="#CC0000" BlurRadius="0" ShadowDepth="0" Opacity="0"/></Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                                To="#FF5555" Duration="0:0:0.15"/>
+                                <ColorAnimation Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"
+                                                To="#AA2222" Duration="0:0:0.15"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"  To="12" Duration="0:0:0.15"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"     To="0.7" Duration="0:0:0.15"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                                To="#CC2222" Duration="0:0:0.15"/>
+                                <ColorAnimation Storyboard.TargetProperty="(Button.BorderBrush).(SolidColorBrush.Color)"
+                                                To="#3A0000" Duration="0:0:0.15"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"  To="0" Duration="0:0:0.15"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"     To="0" Duration="0:0:0.15"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground"  Value="#2A0000"/>
+                    <Setter Property="BorderBrush" Value="#150000"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" x:Key="DangerBtn" BasedOn="{StaticResource PrimaryBtn}">
+            <Setter Property="Foreground"  Value="#883333"/>
+            <Setter Property="BorderBrush" Value="#331111"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                                To="#CC4444" Duration="0:0:0.15"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"  To="10" Duration="0:0:0.15"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"     To="0.5" Duration="0:0:0.15"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                                To="#883333" Duration="0:0:0.15"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"  To="0" Duration="0:0:0.15"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"     To="0" Duration="0:0:0.15"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" x:Key="GhostBtn">
+            <Setter Property="Background"      Value="Transparent"/>
+            <Setter Property="Foreground"      Value="#444444"/>
+            <Setter Property="BorderBrush"     Value="#1E1E1E"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding"         Value="10,5"/>
+            <Setter Property="FontFamily"      Value="Consolas"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Effect">
+                <Setter.Value><DropShadowEffect Color="#880000" BlurRadius="0" ShadowDepth="0" Opacity="0"/></Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                                To="#AA6666" Duration="0:0:0.15"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"  To="8" Duration="0:0:0.15"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"     To="0.4" Duration="0:0:0.15"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <ColorAnimation Storyboard.TargetProperty="(Button.Foreground).(SolidColorBrush.Color)"
+                                                To="#444444" Duration="0:0:0.15"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.BlurRadius"  To="0" Duration="0:0:0.15"/>
+                                <DoubleAnimation Storyboard.TargetProperty="Effect.Opacity"     To="0" Duration="0:0:0.15"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background"      Value="#0A0A0A"/>
+            <Setter Property="Foreground"      Value="#BB4444"/>
+            <Setter Property="BorderBrush"     Value="#280000"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding"         Value="6,4"/>
+            <Setter Property="CaretBrush"      Value="#CC4444"/>
+            <Setter Property="FontFamily"      Value="Consolas"/>
+        </Style>
+
+        <Style TargetType="TabItem">
+            <Setter Property="Background"      Value="#080808"/>
+            <Setter Property="Foreground"      Value="#3A1111"/>
+            <Setter Property="BorderBrush"     Value="#120000"/>
+            <Setter Property="BorderThickness" Value="1,1,1,0"/>
+            <Setter Property="Padding"         Value="14,7"/>
+            <Setter Property="FontFamily"      Value="Consolas"/>
+            <Setter Property="FontWeight"      Value="Bold"/>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#0E0000"/>
+                    <Setter Property="Foreground" Value="#DD3333"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#AA3333"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Scan-line effect brush -->
+        <DrawingBrush x:Key="ScanlineBrush" TileMode="Tile"
+                      Viewport="0,0,1,4" ViewportUnits="Absolute"
+                      Viewbox="0,0,1,4" ViewboxUnits="Absolute" Opacity="0.025">
+            <DrawingBrush.Drawing>
+                <GeometryDrawing Brush="#FF0000">
+                    <GeometryDrawing.Geometry>
+                        <RectangleGeometry Rect="0,0,1,1"/>
+                    </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+
+    </Window.Resources>
+
+    <Grid Background="#060608">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Scanline overlay -->
+        <Rectangle IsHitTestVisible="False" Fill="{StaticResource ScanlineBrush}" Panel.ZIndex="999"/>
+
+        <!-- ── HEADER ───────────────────────────────────────────────── -->
+        <Border Grid.Row="0" Background="#080000" BorderBrush="#1A0000" BorderThickness="0,0,0,1">
+            <Grid Margin="16,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Logo -->
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,0,28,0">
+                    <TextBlock Text="NYTROX" FontSize="36" FontWeight="Bold" FontFamily="Impact"
+                               Foreground="#882222" Margin="0,0,0,-6">
+                        <TextBlock.Effect>
+                            <DropShadowEffect Color="#CC0000" BlurRadius="22" ShadowDepth="0" Opacity="0.6"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
+                    <TextBlock Text="R · A · T" FontSize="10" FontFamily="Consolas" FontWeight="Bold"
+                               Foreground="#441111" Margin="4,0,0,0"/>
+                </StackPanel>
+
+                <!-- Status -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Ellipse x:Name="StatusDot" Width="7" Height="7" Fill="#2A0000" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                    <TextBlock x:Name="StatusLabel" Text="[ OFFLINE ]" Foreground="#332222"
+                               FontSize="11" FontWeight="Bold"/>
+                    <TextBlock x:Name="AgentCountLabel" Text="" Foreground="#4A1111" FontSize="11" Margin="16,0,0,0"/>
+                </StackPanel>
+
+                <!-- Controls -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="MY IP:" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBox x:Name="TxtMyIp" Width="130" Text="0.0.0.0" Margin="0,0,10,0"/>
+                    <TextBlock Text="PORT:" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBox x:Name="TxtPort" Width="55" Text="9000" Margin="0,0,10,0"/>
+                    <TextBlock Text="SECRET:" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <TextBox x:Name="TxtSecret" Width="130" Text="changeme" Margin="0,0,10,0"/>
+                    <CheckBox x:Name="ChkWss" Content="WSS" Foreground="#664444" FontFamily="Consolas" FontSize="11"
+                              VerticalAlignment="Center" Margin="0,0,10,0" ToolTip="Use encrypted WSS/HTTPS (auto-generates self-signed certificate)"/>
+                    <Button x:Name="BtnConnect"    Content="[ LISTEN ]" Style="{StaticResource PrimaryBtn}" Click="BtnConnect_Click"    Margin="0,0,6,0"/>
+                    <Button x:Name="BtnDisconnect" Content="[ STOP ]"   Style="{StaticResource DangerBtn}"  Click="BtnDisconnect_Click" IsEnabled="False"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- ── WAITING BANNER ────────────────────────────────────────── -->
+        <Border Grid.Row="1" x:Name="ListenPanel" Background="#060000"
+                BorderBrush="#1A0000" BorderThickness="0,0,0,1" Padding="14,6" Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="▸ AWAITING CONNECTION —" Foreground="#441111" FontSize="11" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBox x:Name="ListenAddresses" IsReadOnly="True" Background="Transparent"
+                         BorderThickness="0" Foreground="#993333" FontSize="12" FontWeight="Bold" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ── MAIN: agent list + tabs ───────────────────────────────── -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="230"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ── AGENT LIST ─────────────────────────────────────────── -->
+            <Border Grid.Column="0" Background="#070707" BorderBrush="#120000" BorderThickness="0,0,1,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Background="#0A0000" Padding="10,7" BorderBrush="#120000" BorderThickness="0,0,0,1">
+                        <TextBlock Text="// ACTIVE SESSIONS" Foreground="#882222" FontWeight="Bold" FontSize="11"/>
+                    </Border>
+
+                    <ListBox x:Name="AgentList" Grid.Row="1" Background="Transparent" BorderThickness="0"
+                             Foreground="#664444" FontFamily="Consolas" FontSize="11"
+                             SelectionChanged="AgentList_SelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Margin="6,6">
+                                    <TextBlock Text="{Binding Hostname}" Foreground="#BB3333" FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding IpAddress}" Foreground="#552222" FontSize="10"/>
+                                    <TextBlock Text="{Binding ConnectedAt, StringFormat='Connected: {0:HH:mm:ss}'}" Foreground="#331111" FontSize="10"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Background"       Value="Transparent"/>
+                                <Setter Property="BorderBrush"      Value="#0F0000"/>
+                                <Setter Property="BorderThickness"  Value="0,0,0,1"/>
+                                <Setter Property="Padding"          Value="0"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#120000"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#0C0000"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+
+                    <Border Grid.Row="2" Background="#090000" Padding="8,6" BorderBrush="#120000" BorderThickness="0,1,0,0">
+                        <Button Content="[ DISCONNECT ]" Style="{StaticResource DangerBtn}"
+                                FontSize="10" Click="DisconnectAgent_Click" HorizontalAlignment="Stretch"/>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <!-- ── TABS ──────────────────────────────────────────────── -->
+            <TabControl Grid.Column="1" x:Name="MainTabs"
+                        Background="#060608" BorderBrush="#120000" Foreground="#664444"
+                        SelectionChanged="MainTabs_SelectionChanged">
+
+                <!-- ══ SCREEN ══ -->
+                <TabItem Header="[ SCREEN ]">
+                    <Grid Background="#060608">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Background="#080000" BorderBrush="#120000" BorderThickness="0,0,0,1" Padding="10,6">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="QUALITY:" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <Slider x:Name="QualitySlider" Width="100" Minimum="10" Maximum="90" Value="50"
+                                        VerticalAlignment="Center" ValueChanged="QualitySlider_ValueChanged" Margin="0,0,4,0"/>
+                                <TextBlock x:Name="QualityLabel" Text="50%" Foreground="#993333" FontSize="11" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                                <TextBlock Text="FPS:" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <ComboBox x:Name="FpsCombo" Width="65" SelectedIndex="2"
+                                          Background="#0A0A0A" Foreground="#993333" BorderBrush="#280000" Margin="0,0,14,0">
+                                    <ComboBoxItem Content="5"/>
+                                    <ComboBoxItem Content="10"/>
+                                    <ComboBoxItem Content="15"/>
+                                    <ComboBoxItem Content="20"/>
+                                    <ComboBoxItem Content="30"/>
+                                    <ComboBoxItem Content="60"/>
+                                </ComboBox>
+                                <Button Content="[ STREAM ]" Style="{StaticResource PrimaryBtn}" Click="StartStream_Click" Margin="0,0,6,0"/>
+                                <Button Content="[ STOP ]"   Style="{StaticResource DangerBtn}"  Click="StopStream_Click"  Margin="0,0,14,0"/>
+                                <CheckBox x:Name="ChkSendInput" Content="INJECT INPUT" Foreground="#442222" FontSize="11" VerticalAlignment="Center" IsChecked="True"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="1" Background="#030303" BorderBrush="#0F0000" BorderThickness="2">
+                            <Image x:Name="ScreenImage" Stretch="Uniform"
+                                   MouseMove="ScreenImage_MouseMove"
+                                   MouseDown="ScreenImage_MouseDown"
+                                   MouseUp="ScreenImage_MouseUp" Cursor="Cross"/>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- ══ WEBCAM ══ -->
+                <TabItem Header="[ WEBCAM ]">
+                    <Grid Background="#060608">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Border Background="#080000" BorderBrush="#120000" BorderThickness="0,0,0,1" Padding="10,6">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="DEVICE:" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <ComboBox x:Name="CamDeviceCombo" Width="220"
+                                          Background="#0A0A0A" Foreground="#993333" BorderBrush="#280000" Margin="0,0,6,0"
+                                          DisplayMemberPath="Name" SelectedIndex="0"/>
+                                <Button Content="[ REFRESH ]" Style="{StaticResource PrimaryBtn}" Click="CamRefresh_Click" Margin="0,0,14,0"/>
+                                <TextBlock Text="FPS:" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <ComboBox x:Name="CamFpsCombo" Width="60"
+                                          Background="#0A0A0A" Foreground="#993333" BorderBrush="#280000" Margin="0,0,14,0" SelectedIndex="1">
+                                    <ComboBoxItem Content="1"/>
+                                    <ComboBoxItem Content="5"/>
+                                    <ComboBoxItem Content="10"/>
+                                    <ComboBoxItem Content="15"/>
+                                </ComboBox>
+                                <Button Content="[ START ]"    Style="{StaticResource PrimaryBtn}" Click="StartCam_Click"    Margin="0,0,6,0"/>
+                                <Button Content="[ STOP ]"     Style="{StaticResource DangerBtn}"  Click="StopCam_Click"     Margin="0,0,14,0"/>
+                                <Button Content="[ SNAPSHOT ]" Style="{StaticResource PrimaryBtn}" Click="CamSnapshot_Click" Margin="0,0,6,0"/>
+                            </StackPanel>
+                        </Border>
+                        <Border Grid.Row="1" Background="#030303" BorderBrush="#0F0000" BorderThickness="2">
+                            <Image x:Name="CamImage" Stretch="Uniform"/>
+                        </Border>
+                        <Border Grid.Row="2" Background="#080000" BorderBrush="#120000" BorderThickness="0,1,0,0" Padding="10,5">
+                            <TextBlock x:Name="CamStatus" Text="NO FEED — click REFRESH to detect cameras" Foreground="#3A1111" FontSize="11"/>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- ══ FILES ══ -->
+                <TabItem Header="[ FILES ]">
+                    <Grid Background="#060608">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Border Background="#080000" BorderBrush="#120000" BorderThickness="0,0,0,1" Padding="10,7">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="[ UP ]"       Style="{StaticResource PrimaryBtn}" Click="FilesUp_Click"      Margin="0,0,6,0"/>
+                                <TextBox x:Name="TxtFilePath"  Width="460" Text="C:\" KeyDown="TxtFilePath_KeyDown"            Margin="0,0,6,0"/>
+                                <Button Content="[ GO ]"       Style="{StaticResource PrimaryBtn}" Click="FilesGo_Click"       Margin="0,0,14,0"/>
+                                <Button Content="[ UPLOAD ]"   Style="{StaticResource PrimaryBtn}" Click="FileUpload_Click"    Margin="0,0,6,0"/>
+                                <Button Content="[ DELETE ]"   Style="{StaticResource DangerBtn}"  Click="FileDelete_Click"    Margin="0,0,6,0"/>
+                                <Button Content="[ DOWNLOAD ]" Style="{StaticResource PrimaryBtn}" Click="FileDownload_Click"/>
+                            </StackPanel>
+                        </Border>
+                        <ListView x:Name="FileList" Grid.Row="1"
+                                  Background="#060608" Foreground="#774444"
+                                  BorderBrush="#120000" FontFamily="Consolas" FontSize="12"
+                                  MouseDoubleClick="FileList_DoubleClick">
+                            <ListView.Resources>
+                                <Style TargetType="GridViewColumnHeader">
+                                    <Setter Property="Background"  Value="#0A0000"/>
+                                    <Setter Property="Foreground"  Value="#AA2222"/>
+                                    <Setter Property="BorderBrush" Value="#1A0000"/>
+                                    <Setter Property="FontFamily"  Value="Consolas"/>
+                                    <Setter Property="FontWeight"  Value="Bold"/>
+                                    <Setter Property="Padding"     Value="8,4"/>
+                                </Style>
+                            </ListView.Resources>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="NAME"     Width="340" DisplayMemberBinding="{Binding Name}"/>
+                                    <GridViewColumn Header="TYPE"     Width="80"  DisplayMemberBinding="{Binding TypeLabel}"/>
+                                    <GridViewColumn Header="SIZE"     Width="100" DisplayMemberBinding="{Binding SizeLabel}"/>
+                                    <GridViewColumn Header="MODIFIED" Width="160" DisplayMemberBinding="{Binding LastModified}"/>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                        <Border Grid.Row="2" Background="#080000" BorderBrush="#120000" BorderThickness="0,1,0,0" Padding="10,5">
+                            <TextBlock x:Name="FileStatus" Text="READY" Foreground="#3A1111" FontSize="11"/>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- ══ TERMINAL ══ -->
+                <TabItem Header="[ TERMINAL ]">
+                    <Grid Background="#040404">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBox x:Name="TerminalOutput" IsReadOnly="True" VerticalScrollBarVisibility="Auto"
+                                 FontFamily="Consolas" FontSize="13" Background="#040404" Foreground="#993333"
+                                 BorderThickness="0" Padding="14" TextWrapping="Wrap"/>
+                        <Border Grid.Row="1" Background="#080000" BorderBrush="#120000" BorderThickness="0,1,0,0" Padding="10,7">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="NYTROX:/>" Foreground="#882222" VerticalAlignment="Center"
+                                           FontSize="13" FontWeight="Bold" Margin="0,0,10,0">
+                                    <TextBlock.Effect>
+                                        <DropShadowEffect Color="#AA0000" BlurRadius="8" ShadowDepth="0" Opacity="0.5"/>
+                                    </TextBlock.Effect>
+                                </TextBlock>
+                                <TextBox x:Name="TxtCommand" Width="650" KeyDown="TxtCommand_KeyDown" Margin="0,0,8,0"/>
+                                <Button Content="[ EXEC ]"  Style="{StaticResource PrimaryBtn}" Click="RunCommand_Click"   Margin="0,0,6,0"/>
+                                <Button Content="[ CLEAR ]" Style="{StaticResource GhostBtn}"   Click="ClearTerminal_Click"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- ══ MONITOR ══ -->
+                <TabItem Header="[ MONITOR ]">
+                    <Grid Background="#060608" Margin="12">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <UniformGrid Grid.Row="0" Rows="1" Margin="0,0,0,12">
+                            <Border Background="#080000" BorderBrush="#180000" BorderThickness="1" CornerRadius="2" Margin="4" Padding="14">
+                                <StackPanel>
+                                    <TextBlock Text="CPU LOAD" Foreground="#331111" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock x:Name="LblCpu" Text="—" FontSize="26" FontWeight="Bold" Foreground="#993333"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="#080000" BorderBrush="#180000" BorderThickness="1" CornerRadius="2" Margin="4" Padding="14">
+                                <StackPanel>
+                                    <TextBlock Text="MEMORY" Foreground="#331111" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock x:Name="LblMem" Text="—" FontSize="18" FontWeight="Bold" Foreground="#883333"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="#080000" BorderBrush="#180000" BorderThickness="1" CornerRadius="2" Margin="4" Padding="14">
+                                <StackPanel>
+                                    <TextBlock Text="HOSTNAME" Foreground="#331111" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock x:Name="LblHost" Text="—" FontSize="18" FontWeight="Bold" Foreground="#AA3333"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="#080000" BorderBrush="#180000" BorderThickness="1" CornerRadius="2" Margin="4" Padding="14">
+                                <StackPanel>
+                                    <TextBlock Text="UPTIME" Foreground="#331111" FontSize="10" FontWeight="Bold"/>
+                                    <TextBlock x:Name="LblUptime" Text="—" FontSize="18" FontWeight="Bold" Foreground="#663333"/>
+                                </StackPanel>
+                            </Border>
+                        </UniformGrid>
+                        <StackPanel Grid.Row="1" x:Name="DiskPanel" Orientation="Horizontal" Margin="0,0,0,12"/>
+                        <Grid Grid.Row="2">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal" Margin="4,0,0,8">
+                                <TextBlock Text="// PROCESS LIST" Foreground="#441111" FontWeight="Bold" FontSize="12" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                                <Button Content="[ REFRESH ]" Style="{StaticResource PrimaryBtn}" Click="RefreshProcesses_Click"/>
+                            </StackPanel>
+                            <ListView x:Name="ProcessListView" Grid.Row="1" Background="#080000" Foreground="#774444" BorderBrush="#120000" FontFamily="Consolas" FontSize="12">
+                                <ListView.Resources>
+                                    <Style TargetType="GridViewColumnHeader">
+                                        <Setter Property="Background"  Value="#0A0000"/>
+                                        <Setter Property="Foreground"  Value="#AA2222"/>
+                                        <Setter Property="BorderBrush" Value="#1A0000"/>
+                                        <Setter Property="FontFamily"  Value="Consolas"/>
+                                        <Setter Property="FontWeight"  Value="Bold"/>
+                                        <Setter Property="Padding"     Value="8,4"/>
+                                    </Style>
+                                </ListView.Resources>
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="PID"    Width="70"  DisplayMemberBinding="{Binding Pid}"/>
+                                        <GridViewColumn Header="NAME"   Width="260" DisplayMemberBinding="{Binding Name}"/>
+                                        <GridViewColumn Header="MEMORY" Width="120" DisplayMemberBinding="{Binding MemLabel}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+
+                <!-- ══ AUDIT LOG ══ -->
+                <TabItem Header="[ AUDIT LOG ]">
+                    <Grid Background="#040404">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBox x:Name="AuditLog" IsReadOnly="True" VerticalScrollBarVisibility="Auto"
+                                 FontFamily="Consolas" FontSize="12" Background="#040404" Foreground="#775522"
+                                 BorderThickness="0" Padding="14" TextWrapping="Wrap"/>
+                        <Border Grid.Row="1" Background="#080000" BorderBrush="#120000" BorderThickness="0,1,0,0" Padding="10,7">
+                            <StackPanel Orientation="Horizontal">
+                                <Button Content="[ EXPORT LOG ]" Style="{StaticResource PrimaryBtn}" Click="ExportLog_Click" Margin="0,0,8,0"/>
+                                <Button Content="[ CLEAR ]"      Style="{StaticResource GhostBtn}"   Click="ClearLog_Click"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </TabItem>
+
+                <!-- ══ BUILD ══ -->
+                <TabItem Header="[ BUILD ]">
+                    <Grid Background="#060608" Margin="40,28,40,28">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="380"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.ColumnSpan="3"
+                                   Text="// AGENT BUILDER" FontSize="20" FontWeight="Bold" Foreground="#882222" Margin="0,0,0,4">
+                            <TextBlock.Effect>
+                                <DropShadowEffect Color="#880000" BlurRadius="12" ShadowDepth="0" Opacity="0.5"/>
+                            </TextBlock.Effect>
+                        </TextBlock>
+                        <TextBlock Grid.Row="1" Grid.ColumnSpan="3"
+                                   Text="SDK build sets the Task Manager / Properties name from your EXE name (not &quot;Agent&quot;). If no session appears: Windows Firewall must allow inbound on your listen port for this app; test same-PC with 127.0.0.1; ws vs wss must match listener."
+                                   Foreground="#331111" FontSize="11" TextWrapping="Wrap" Margin="0,0,0,22"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="YOUR IP:"    Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,0,12"/>
+                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,12">
+                            <TextBox x:Name="BuilderIp"   Width="200" Text="192.168.1.50" Margin="0,0,8,0"/>
+                            <TextBlock Text="PORT:" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBox x:Name="BuilderPort" Width="70" Text="9000"/>
+                        </StackPanel>
+                        <TextBlock Grid.Row="2" Grid.Column="2" Text="your listening IP and port"
+                                   Foreground="#221111" FontSize="10" VerticalAlignment="Center" Margin="8,0,0,12"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="SECRET:"     Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,0,12"/>
+                        <TextBox   Grid.Row="3" Grid.Column="1" x:Name="BuilderSecret" Text="changeme" Margin="0,0,0,12"/>
+                        <TextBlock Grid.Row="3" Grid.Column="2" Text="must match the secret in the listener header"
+                                   Foreground="#221111" FontSize="10" VerticalAlignment="Center" Margin="8,0,0,12"/>
+
+                        <!-- Proxy row -->
+                        <TextBlock Grid.Row="4" Grid.Column="0" Text="SOCKS5 PROXY:" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,0,12"/>
+                        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" Margin="0,0,0,12">
+                            <TextBox x:Name="BuilderProxyHost" Width="170" Text="" Margin="0,0,6,0" ToolTip="Proxy host e.g. 127.0.0.1"/>
+                            <TextBlock Text=":" Foreground="#3A1111" FontSize="14" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBox x:Name="BuilderProxyPort" Width="60" Text="" ToolTip="Proxy port e.g. 1080"/>
+                        </StackPanel>
+                        <TextBlock Grid.Row="4" Grid.Column="2" Text="optional — routes agent through SOCKS5 proxy (hides your IP)"
+                                   Foreground="#221111" FontSize="10" VerticalAlignment="Center" Margin="8,0,0,12"/>
+
+                        <!-- Hide IP row -->
+                        <TextBlock Grid.Row="5" Grid.Column="0" Text="PRIVACY:" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,0,12"/>
+                        <CheckBox  Grid.Row="5" Grid.Column="1" x:Name="BuilderHideIp" Content="Hide agent IP in session list" Foreground="#774444" FontFamily="Consolas" FontSize="11" IsChecked="True" Margin="0,0,0,12" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Row="5" Grid.Column="2" Text="shows [HIDDEN] instead of real IP"
+                                   Foreground="#221111" FontSize="10" VerticalAlignment="Center" Margin="8,0,0,12"/>
+
+                        <TextBlock Grid.Row="6" Grid.Column="0" Text="OUTPUT FOLDER:" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,0,12"/>
+                        <TextBox   Grid.Row="6" Grid.Column="1" x:Name="BuilderOutputPath" IsReadOnly="True" Text="(browse for output folder)" Foreground="#221111" Margin="0,0,8,12"/>
+                        <Button    Grid.Row="6" Grid.Column="2" Content="[ BROWSE ]" HorizontalAlignment="Left" Style="{StaticResource PrimaryBtn}" Click="BuilderBrowseOutput_Click" Margin="0,0,0,12"/>
+
+                        <TextBlock Grid.Row="7" Grid.Column="0" Text="EXE NAME:" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,0,12"/>
+                        <TextBox   Grid.Row="7" Grid.Column="1" x:Name="BuilderExeName" Text="SecurityHealthService.exe" Foreground="#221111" Margin="0,0,8,12"/>
+                        <TextBlock Grid.Row="7" Grid.Column="2" Text="filename for built agent (.exe added if missing)" Foreground="#221111" FontSize="10" VerticalAlignment="Center" Margin="8,0,0,12"/>
+
+                        <TextBlock Grid.Row="8" Grid.Column="0" Text="ICON (.ico):" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,0,12"/>
+                        <TextBox   Grid.Row="8" Grid.Column="1" x:Name="BuilderIconPath" IsReadOnly="True" Text="(optional — forces full SDK build)" Foreground="#221111" Margin="0,0,8,12"/>
+                        <Button    Grid.Row="8" Grid.Column="2" Content="[ BROWSE ]" HorizontalAlignment="Left" Style="{StaticResource PrimaryBtn}" Click="BuilderBrowseIcon_Click" Margin="0,0,0,12"/>
+
+                        <TextBlock Grid.Row="9" Grid.Column="0" Text="INSTALL FOLDER:" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,0,12"/>
+                        <TextBox   Grid.Row="9" Grid.Column="1" x:Name="BuilderInstallFolder" Text="Microsoft\Windows\SecurityHealth" Foreground="#221111" Margin="0,0,8,12"/>
+                        <TextBlock Grid.Row="9" Grid.Column="2" Text="under AppData — hidden copy + backup" Foreground="#221111" FontSize="10" VerticalAlignment="Center" Margin="8,0,0,12"/>
+
+                        <TextBlock Grid.Row="10" Grid.Column="0" Text="STARTUP KEY:" Foreground="#3A1111" FontSize="11" VerticalAlignment="Center" Margin="0,0,0,12"/>
+                        <TextBox   Grid.Row="10" Grid.Column="1" x:Name="BuilderPersistenceKey" Text="WindowsSecurityHealth" Foreground="#221111" Margin="0,0,8,12"/>
+                        <TextBlock Grid.Row="10" Grid.Column="2" Text="registry / task name (letters, no spaces)" Foreground="#221111" FontSize="10" VerticalAlignment="Center" Margin="8,0,0,12"/>
+
+                        <StackPanel Grid.Row="11" Grid.ColumnSpan="3" Margin="0,14,0,0">
+                            <Button x:Name="BtnBuild" Content="[ GENERATE AGENT PACKAGE ]"
+                                    Style="{StaticResource PrimaryBtn}" FontSize="14" Padding="24,10"
+                                    HorizontalAlignment="Left" Click="BtnBuild_Click"/>
+                            <Border x:Name="BuildResultBorder" Background="#080000" BorderBrush="#1A0000" BorderThickness="1"
+                                    CornerRadius="2" Margin="0,14,0,0" Padding="14,10" Visibility="Collapsed">
+                                <StackPanel>
+                                    <TextBlock x:Name="BuildResultIcon" FontSize="14" FontWeight="Bold" Margin="0,0,0,4"/>
+                                    <TextBlock x:Name="BuildResultText" Foreground="#774444" TextWrapping="Wrap" FontSize="11"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+
+            </TabControl>
+        </Grid>
+    </Grid>
+</Window>

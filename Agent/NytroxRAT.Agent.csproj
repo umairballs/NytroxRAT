@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>nytrox.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\NytroxRAT.Shared.csproj"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="9.0.0"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="nytrox.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="obfuscar.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <!--
+    Auto-obfuscate on Release builds.
+    Requires: dotnet tool install -g obfuscar
+    Skip this target by building with: msbuild /p:SkipObfuscar=true
+  -->
+  <Target Name="ObfuscateAgent" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release' AND '$(SkipObfuscar)' != 'true'">
+    <Message Text="=== NytroxRAT: Running Obfuscar ===" Importance="high"/>
+    <Exec Command="obfuscar.console obfuscar.xml"
+          WorkingDirectory="$(MSBuildProjectDirectory)"
+          ContinueOnError="true"/>
+    <Message Text="=== Obfuscated output: bin\Release\net9.0-windows\Obfuscated\ ===" Importance="high"/>
+  </Target>
+
+</Project>

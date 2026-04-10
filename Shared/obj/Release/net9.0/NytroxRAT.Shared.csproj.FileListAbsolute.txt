@@ -1,0 +1,11 @@
+c:\Users\Umair\Downloads\RemoteAccess\Shared\bin\Release\net9.0\NytroxRAT.Shared.deps.json
+c:\Users\Umair\Downloads\RemoteAccess\Shared\bin\Release\net9.0\NytroxRAT.Shared.dll
+c:\Users\Umair\Downloads\RemoteAccess\Shared\bin\Release\net9.0\NytroxRAT.Shared.pdb
+c:\Users\Umair\Downloads\RemoteAccess\Shared\obj\Release\net9.0\NytroxRAT.Shared.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\Umair\Downloads\RemoteAccess\Shared\obj\Release\net9.0\NytroxRAT.Shared.AssemblyInfoInputs.cache
+c:\Users\Umair\Downloads\RemoteAccess\Shared\obj\Release\net9.0\NytroxRAT.Shared.AssemblyInfo.cs
+c:\Users\Umair\Downloads\RemoteAccess\Shared\obj\Release\net9.0\NytroxRAT.Shared.csproj.CoreCompileInputs.cache
+c:\Users\Umair\Downloads\RemoteAccess\Shared\obj\Release\net9.0\NytroxRAT.Shared.dll
+c:\Users\Umair\Downloads\RemoteAccess\Shared\obj\Release\net9.0\refint\NytroxRAT.Shared.dll
+c:\Users\Umair\Downloads\RemoteAccess\Shared\obj\Release\net9.0\NytroxRAT.Shared.pdb
+c:\Users\Umair\Downloads\RemoteAccess\Shared\obj\Release\net9.0\ref\NytroxRAT.Shared.dll

