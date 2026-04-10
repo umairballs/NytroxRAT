@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="nytrox_logo.png" width="150" alt="NytroxRAT"/>
+</p>
+
 # NytroxRAT
 
 A self-hosted, open-source remote access tool for Windows written in C# (.NET 9).
