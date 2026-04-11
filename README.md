@@ -1,7 +1,8 @@
 <p align="center">
   <img src="nytrox_logo.png" width="150" alt="NytroxRAT"/>
 </p>
- # ⚠️Disclaimer: This tool is strictly for educational and ethical purposes only; the developer is not responsible or  liable for any misuse or damage caused by the tool. 🛡️
+
+> ## ⚠️ **Disclaimer: This tool is for educational and ethical purposes only; the devoloper is not responsible or liable  for any misuse or damage caused by the tool. 🛡️**
 
 
 
